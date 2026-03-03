@@ -45,7 +45,7 @@ export default function MatchTiles() {
 
       {/* UPLOAD */}
       <div
-        className="upload-box"
+        className="match-upload-box"
         onClick={() => inputRef.current.click()}
       >
         <input
@@ -58,41 +58,41 @@ export default function MatchTiles() {
 
         {!preview && (
           <>
-            <div className="upload-icon">📷</div>
+            <div className="match-upload-icon">📷</div>
             <h3>Upload Reference Image</h3>
             <span>JPG / PNG / WEBP</span>
           </>
         )}
 
         {preview && (
-          <img src={preview} alt="Preview" className="preview-img" />
+          <img src={preview} alt="Preview" className="match-preview-img" />
         )}
       </div>
 
       {/* LOADING */}
       {loading && (
-        <div className="loading">
-          <span className="spinner" />
+        <div className="match-loading">
+          <span className="match-spinner" />
           <p>Analysing image…</p>
         </div>
       )}
 
       {/* RESULTS */}
       {!loading && tiles.length > 0 && (
-        <div className="results">
-          <div className="results-header">
+        <div className="match-results">
+          <div className="match-results-header">
             <h2>Matching Tiles</h2>
             <span>{tiles.length} results</span>
           </div>
 
-          <div className="tiles-grid">
+          <div className="match-tiles-grid">
             {tiles.map((tile) => (
-              <div key={tile._id} className="tile-card">
+              <div key={tile._id} className="match-tile-card">
                 <img
                   src={`${BASE_URL}${tile.tileImage}`}
                   alt={tile.name}
                 />
-                <div className="tile-info">
+                <div className="match-tile-info">
                   <h4>{tile.name}</h4>
                   <p>{tile.series}</p>
                 </div>
