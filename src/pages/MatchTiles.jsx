@@ -1,7 +1,10 @@
 import { useState, useRef } from "react";
 import "./MatchTiles.css";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+/* ✅ SAFE BACKEND URL */
+const BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://krishna-ceramics-backend.onrender.com";
 
 export default function MatchTiles() {
   const [tiles, setTiles] = useState([]);
@@ -11,8 +14,10 @@ export default function MatchTiles() {
 
   const handleUpload = async (file) => {
     if (!file) return;
+
     setPreview(URL.createObjectURL(file));
     setLoading(true);
+    setTiles([]);
 
     const form = new FormData();
     form.append("image", file);
@@ -22,10 +27,13 @@ export default function MatchTiles() {
         method: "POST",
         body: form,
       });
+
+      if (!res.ok) throw new Error("Match request failed");
+
       const data = await res.json();
       setTiles(data.matches || []);
     } catch (err) {
-      console.error(err);
+      console.error("Match error:", err);
       setTiles([]);
     }
 
@@ -38,8 +46,8 @@ export default function MatchTiles() {
       <div className="match-header">
         <h1>Find Similar Tiles</h1>
         <p>
-          Upload a tile or room image and discover visually similar tiles from
-          our collection.
+          Upload a tile or room image and discover visually similar tiles
+          from our collection.
         </p>
       </div>
 
@@ -65,7 +73,11 @@ export default function MatchTiles() {
         )}
 
         {preview && (
-          <img src={preview} alt="Preview" className="match-preview-img" />
+          <img
+            src={preview}
+            alt="Preview"
+            className="match-preview-img"
+          />
         )}
       </div>
 
