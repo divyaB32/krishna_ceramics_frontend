@@ -3,6 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import "./ProductPreview.css";
 import Visualize from "./visualize";
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
+const getImageUrl = (img) => {
+  if (!img) return "";
+  if (img.startsWith("http")) return img;
+  return `${BASE_URL}${img}`;
+};
+
 export default function ProductPreview() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,18 +21,18 @@ export default function ProductPreview() {
   const [showVisualize, setShowVisualize] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${BASE_URL}/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
         setActiveImage(
           data.previewImages?.[0]
-            ? `http://localhost:5000${data.previewImages[0]}`
-            : `http://localhost:5000${data.tileImage}`
+            ? getImageUrl(data.previewImages[0])
+            : getImageUrl(data.tileImage)
         );
       });
 
-    fetch("http://localhost:5000/api/products")
+    fetch(`${BASE_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => setAllProducts(data));
   }, [id]);
@@ -55,17 +63,18 @@ export default function ProductPreview() {
         <div className="preview-left">
           <div className="image-frame">
             <div className="thumb-column">
-              {(product.previewImages || []).map((img, i) => (
-                <img
-                  key={i}
-                  src={`http://localhost:5000${img}`}
-                  alt=""
-                  className={activeImage === `http://localhost:5000${img}` ? "active" : ""}
-                  onClick={() =>
-                    setActiveImage(`http://localhost:5000${img}`)
-                  }
-                />
-              ))}
+              {(product.previewImages || []).map((img, i) => {
+                const fullImg = getImageUrl(img);
+                return (
+                  <img
+                    key={i}
+                    src={fullImg}
+                    alt=""
+                    className={activeImage === fullImg ? "active" : ""}
+                    onClick={() => setActiveImage(fullImg)}
+                  />
+                );
+              })}
             </div>
 
             <div className="main-image-box">
@@ -102,7 +111,7 @@ export default function ProductPreview() {
               >
                 <div className="related-image">
                   <img
-                    src={`http://localhost:5000${item.tileImage}`}
+                    src={getImageUrl(item.tileImage)}
                     alt={item.name}
                   />
                 </div>

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const BASE_URL = "http://localhost:5000";
+
 
 export default function MatchedTilesGrid({ tiles }) {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function MatchedTilesGrid({ tiles }) {
           onClick={() => navigate(`/product/${tile._id}`)}
         >
           <img
-            src={`${BASE_URL}${tile.tileImage}`}
+            src={`${import.meta.env.VITE_API_URL}${tile.tileImage}`}
             style={{ width: "100%", borderRadius: "8px" }}
           />
           <p>{tile.name}</p>

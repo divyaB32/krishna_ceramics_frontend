@@ -2,15 +2,12 @@ import { useState } from "react";
 import "./visualize.css";
 
 /* ===============================
-   ✅ BACKEND BASE URL (SAFE)
+   ✅ BACKEND BASE URL
 ================================ */
-const API_BASE =
-  import.meta.env.MODE === "development"
-    ? "http://localhost:5000"
-    : "https://krishna-ceramics-backend.onrender.com";
+const API_BASE = import.meta.env.VITE_API_URL;
 
 /* ===============================
-   ROOM CONFIG (UNCHANGED)
+   ROOM CONFIG
 ================================ */
 const ROOMS = [
   {
@@ -50,7 +47,7 @@ export default function Visualize({ open, onClose, product }) {
   const [surface, setSurface] = useState("floor");
 
   /* ===============================
-     ✅ TILE IMAGE FROM BACKEND
+     TILE IMAGE FROM BACKEND
   ================================ */
   const tileUrl = product.tileImage
     ? `${API_BASE}${product.tileImage}`

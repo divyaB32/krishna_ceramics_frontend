@@ -47,14 +47,14 @@ function AdminDashboard() {
   const [profileMsg, setProfileMsg] = useState("");
 
   const fetchProducts = async () => {
-    const res = await fetch(`${BASE_URL}/api/products`);
+   const res = await fetch(`${import.meta.env.VITE_API_URL}/api/products`);
     const data = await res.json();
     setProducts(data);
   };
 
   const fetchEnquiries = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/api/contact/all`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/contact/all`);
       const data = await res.json();
       setEnquiries(data);
     } catch (err) {
@@ -111,8 +111,8 @@ function AdminDashboard() {
     if (hoverFile) fd.append("hoverImage", hoverFile);
     previewFiles.forEach(f => fd.append("previewImages", f));
     const url = editingId
-      ? `${BASE_URL}/api/products/${editingId}`
-      : `${BASE_URL}/api/products`;
+      ? `${import.meta.env.VITE_API_URL}/api/products/${editingId}`
+: `${import.meta.env.VITE_API_URL}/api/products`;
     const method = editingId ? "PUT" : "POST";
     await fetch(url, { method, body: fd });
     resetForm();
@@ -122,9 +122,17 @@ function AdminDashboard() {
 
   const handleEdit = (p) => {
     setForm({ name: p.name, series: p.series, category: p.category || "" });
-    setTilePreview(`${BASE_URL}${p.tileImage}`);
-    setHoverPreview(p.hoverImage ? `${BASE_URL}${p.hoverImage}` : "");
-    setPreviewPreviews((p.previewImages || []).map(i => `${BASE_URL}${i}`));
+    setTilePreview(`${import.meta.env.VITE_API_URL}${p.tileImage}`);
+    setHoverPreview(
+  p.hoverImage
+    ? `${import.meta.env.VITE_API_URL}${p.hoverImage}`
+    : ""
+);
+    setPreviewPreviews(
+  (p.previewImages || []).map(
+    i => `${import.meta.env.VITE_API_URL}${i}`
+  )
+);
     setEditingId(p._id);
     setActiveTab("add-product");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -132,7 +140,10 @@ function AdminDashboard() {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
-    await fetch(`${BASE_URL}/api/products/${id}`, { method: "DELETE" });
+    await fetch(
+  `${import.meta.env.VITE_API_URL}/api/products/${id}`,
+  { method: "DELETE" }
+);
     fetchProducts();
   };
 
@@ -152,7 +163,7 @@ function AdminDashboard() {
     setProfileLoading(true);
     setProfileMsg("");
     try {
-      await fetch(`${BASE_URL}/api/admin/profile`, {
+     await fetch(`${import.meta.env.VITE_API_URL}/api/admin/profile`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profileForm)
@@ -287,7 +298,7 @@ function AdminDashboard() {
                   <div className="product-card" key={p._id}>
                     <div className="product-img-wrap">
                       <img
-                        src={`${BASE_URL}${p.tileImage}`}
+                        src={`${import.meta.env.VITE_API_URL}${p.tileImage}`}
                         alt={p.name}
                         className="product-img"
                       />
@@ -428,7 +439,7 @@ function AdminDashboard() {
                     <div className="enquiry-img-wrap">
                       {e.tileImage ? (
                         <img
-                          src={`${BASE_URL}${e.tileImage}`}
+                          src={`${import.meta.env.VITE_API_URL}${e.tileImage}`}
                           alt={e.tileName || "Tile"}
                           className="enquiry-img"
                         />

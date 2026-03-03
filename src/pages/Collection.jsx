@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Collection.css";
 
-/* ✅ UNIVERSAL BACKEND URL (LOCAL + PROD + MOBILE) */
-const BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000";
+/* ✅ PRODUCTION SAFE BACKEND URL */
+const BASE_URL = import.meta.env.VITE_API_URL;
 
-/* 🔴 IMPORTANT: single safe image resolver (UNCHANGED LOGIC) */
+/* ✅ SAFE IMAGE RESOLVER */
 const getImageUrl = (img) => {
   if (!img) return "";
   if (img.startsWith("http")) return img;
@@ -16,16 +15,14 @@ const getImageUrl = (img) => {
 const Collection = () => {
   const [products, setProducts] = useState([]);
 
-  // EXISTING STATES (UNCHANGED)
   const [activeSeries, setActiveSeries] = useState("Fabula Series");
   const [activeCategory, setActiveCategory] = useState("");
 
-  // SEARCH STATE (UNCHANGED)
   const [search, setSearch] = useState("");
 
   const navigate = useNavigate();
 
-  /* ✅ MOBILE-SAFE FETCH WITH RETRY */
+  /* ✅ MOBILE SAFE FETCH WITH RETRY */
   const fetchWithRetry = async (url, retries = 3) => {
     try {
       const res = await fetch(url);
@@ -51,7 +48,6 @@ const Collection = () => {
       });
   }, []);
 
-  // EXISTING dropdown categories (UNCHANGED)
   const endlessCategories = [
     "Polished Surface",
     "HI Surface",
@@ -60,7 +56,6 @@ const Collection = () => {
     "GHR Surface",
   ];
 
-  // FILTER LOGIC (UNCHANGED)
   const filteredProducts = products.filter((product) => {
     if (activeSeries === "Endless Surface") {
       if (!activeCategory) return false;
